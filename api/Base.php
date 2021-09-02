@@ -20,8 +20,14 @@ class Base
      */
     public function __construct()
     {
-        Log::instance('app', __DIR__ . '/../../logs/omega.log', 100);
-        call_user_func_array([$this, $this->endpoint], []);
+        try {
+            Log::instance('app', __DIR__ . '/../../logs/omega.log', 100);
+            call_user_func_array([$this, $this->endpoint], []);
+        } catch (\Exception $e) {
+            $code = $e->getCode();
+            $message = $e->getMessage();
+            $this->json($code, ['message' => $message]);
+        }
     }
 
     /**
