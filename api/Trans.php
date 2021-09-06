@@ -139,6 +139,7 @@ class Trans extends Base
      * @return string
      */
     public function strtotime( $data ) {
+        ini_set('date.timezone', 'Asia/Shanghai');
         return strtotime($data);
     }
 
@@ -152,6 +153,7 @@ class Trans extends Base
         if (!is_numeric($data)) {
             return 'false';
         }
+        ini_set('date.timezone', 'Asia/Shanghai');
         return date('Y-m-d H:i:s', $data);
     }
 
