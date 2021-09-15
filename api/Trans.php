@@ -62,8 +62,20 @@ class Trans extends Base
         return $result;
     }
 
+    
     /**
-     * base64解析数组
+     * base64加密
+     * @author decezz@qq.com
+     * @param string $data
+     * @return string
+     */
+    public function base64Encode( $data ) {
+        $result = base64_encode($data);
+        return $result;
+    }
+
+    /**
+     * base64解密
      * @author decezz@qq.com
      * @param string $data
      * @return array
