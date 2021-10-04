@@ -24,12 +24,14 @@ class Redis
         }
         try {
             $redisConfig = Config::get('redis');
+            $timeout = empty($redisConfig['timeout']) ? 0 : $redisConfig['timeout'];
             $redis = new \Redis();
-            $redis->connect($redisConfig['host'], $redisConfig['port']);
+            $redis->connect($redisConfig['host'], $redisConfig['port'], $timeout);
             // check auth
             if (!empty($redisConfig['pass'])) {
                 $redis->auth($redisConfig['pass']);
             }
+            self::$redis = $redis;
         } catch (\RedisException $re) {
             $alert = sprintf('Redis exception in %s:%d', $re->getFile(), $re->getLine());
             Log::alert($alert);
