@@ -3,6 +3,7 @@
         "dece/origin": "^1.1",
         "topthink/think-orm": "^2.0",
         "workerman/workerman": "^4.0",
-        "workerman/crontab": "^1.0"
+        "workerman/crontab": "^1.0",
+        "phpmailer/phpmailer": "^6.5"
     }
 }
