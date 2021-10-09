@@ -14,7 +14,7 @@ class Download extends Base
      * @var array
      */
     public static $downloadTpl = [
-        'annie'  => 'annie -o %s \'%s\'',
+        'annie'  => 'annie -o %s %s',
         'aria2'  => 'aria2c -d %s -o \'%s\' \'%s\'',
     ];
 
