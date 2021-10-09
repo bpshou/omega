@@ -48,13 +48,14 @@ class Download extends Base
         }
         $toolsTpl = self::$downloadTpl[$tools];
         $config = Config::get('config');
-        $rpushKey = $config['downloadKey'];
+        // $rpushKey = $config['downloadKey'];
         $download = $config['downloadDir'];
         // 下载地址填入开头
         array_unshift($resource, $download);
         $task = vsprintf($toolsTpl, $resource);
         $redis = Redis::instance();
-        return $redis->rpush($rpushKey, $task);
+        // return $redis->rpush($rpushKey, $task);
+        return $redis->publish('command', base64_encode($task));
     }
 
     /**
