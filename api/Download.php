@@ -28,11 +28,22 @@ class Download extends Base
         if (!isset($Request->post['resource']) || empty($Request->post['resource'])) {
             $this->json(400, ['msg' => 'params error:resource']);
         }
+        if (isset($Request->post['downloaddir']) || !empty($Request->post['downloaddir'])) {
+            $redis = Redis::instance();
+            $redis->set('downloaddir', $Request->post['downloaddir']);
+            $redis->expire('downloaddir', time() + 86400);
+        }
         $resource = $Request->post['resource'];
-        if (!$this->addAsyncTask('annie', $resource)) {
+        $download = self::getDownloadDir();
+        if (!$this->addAsyncTask('annie', $download, $resource)) {
             $this->json(500, ['msg' => 'add task fail']);
         }
-        $this->json(200, ['msg' => '下载任务添加成功', 'resource' => $resource]);
+        $result = [
+            'msg' => '下载任务添加成功',
+            'resource' => $resource,
+            'download' => $download,
+        ];
+        $this->json(200, $result);
     }
     
     /**
@@ -47,11 +58,6 @@ class Download extends Base
             return false;
         }
         $toolsTpl = self::$downloadTpl[$tools];
-        $config = Config::get('config');
-        // $rpushKey = $config['downloadKey'];
-        $download = $config['downloadDir'];
-        // 下载地址填入开头
-        array_unshift($resource, $download);
         $task = vsprintf($toolsTpl, $resource);
         $redis = Redis::instance();
         // return $redis->rpush($rpushKey, $task);
@@ -72,5 +78,20 @@ class Download extends Base
             Log::debug($cmd, $output, $return_var);
         }
         return true;
+    }
+
+    /**
+     * 获取下载地址
+     * @return string
+     */
+    public static function getDownloadDir()
+    {
+        $redis = Redis::instance();
+        $downloaddir = $redis->get('downloaddir');
+        if (!$downloaddir) {
+            $config = Config::get('config');
+            $downloaddir = $config['downloadDir'];
+        }
+        return $downloaddir;
     }
 }
