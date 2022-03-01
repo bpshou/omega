@@ -14,6 +14,14 @@ class Trans extends Base
      * @return array
      */
     public function service() {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            header('Access-Control-Allow-Origin: ' . ($_SERVER['HTTP_ORIGIN'] ?? '*'));
+            header('Access-Control-Allow-Headers: Content-Type');
+            header('Access-Control-Allow-Methods: POST,GET,HEAD,DELETE,PUT,PATCH,OPTION');
+            header('Access-Control-Allow-Credentials: true');
+            http_response_code(200);
+            return;
+        }
         $Request    = new Request();
         if (!isset($Request->post['type'])) {
             $this->json(400, ['msg' => 'params error:type']);
@@ -176,6 +184,10 @@ class Trans extends Base
      * @return mixed
      */
     private function echo( $data ) {
+        header('Access-Control-Allow-Origin: ' . ($_SERVER['HTTP_ORIGIN'] ?? '*'));
+        header('Access-Control-Allow-Headers: Content-Type');
+        header('Access-Control-Allow-Methods: POST,GET,HEAD');
+        header('Access-Control-Allow-Credentials: true');
         if (is_array($data)) {
             var_export($data);
         } else {

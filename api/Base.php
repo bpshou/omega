@@ -61,7 +61,7 @@ class Base
     protected function result($code, $contentType, $content, $header)
     {
         $Response = new Response();
-        $Response->cross()
+        $Response->cross($_SERVER['HTTP_ORIGIN'] ?? '*')
             ->code($code)
             ->header($header)
             ->content($content)
