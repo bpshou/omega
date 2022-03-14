@@ -5,7 +5,7 @@ namespace api;
 
 class DouyinUser extends Base
 {
-    public $charlesDir = 'C:\Users\origin\Desktop\douyin';
+    public $charlesDir = 'C:\Users\origin\Downloads\douyin';
 
 
     /**
@@ -35,7 +35,7 @@ class DouyinUser extends Base
             $file = $this->charlesDir . DIRECTORY_SEPARATOR . $fileName;
             $json = file_get_contents($file);
             $data = $this->pickData($json);
-            unlink($file);
+            // unlink($file);
         }
         return $result;
     }
@@ -74,9 +74,10 @@ class DouyinUser extends Base
         if (empty($result)) {
             return $result;
         }
-        $result = json_encode($result, JSON_PRETTY_PRINT);
+        // $result = json_encode($result, JSON_PRETTY_PRINT);
+        // var_dump(implode(PHP_EOL, $result));die;//PHP_EOL
         $file = __DIR__ . '/../runtime/' . microtime(true) . '.txt';
-        file_put_contents($file, $result, FILE_APPEND);
+        file_put_contents($file, implode(PHP_EOL, $result), FILE_APPEND);
         return $result;
     }
 
@@ -89,6 +90,8 @@ class DouyinUser extends Base
     {
         $result = [];
         foreach ($aweme_list as $value) {
+            $result[] = 'https://www.douyin.com/video/' . data_get($value, 'aweme_id', '');
+            continue;
             $result[] = [
                 'nickname' => data_get($value, 'author.nickname', ''),
                 'aweme_id' => data_get($value, 'aweme_id', ''),
