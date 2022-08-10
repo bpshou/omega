@@ -2,6 +2,8 @@
 
 namespace api;
 
+use origin\Request;
+
 class api extends Base
 {
     /**
@@ -10,6 +12,11 @@ class api extends Base
      */
     public function service()
     {
-        $this->json(200, ['api' => 'success']);
+        $Request = new Request();
+        $this->json(200, [
+            'api' => 'success',
+            'get' => $Request->get,
+            'POST' => $Request->post,
+        ]);
     }
 }
